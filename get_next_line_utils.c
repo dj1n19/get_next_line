@@ -6,11 +6,12 @@
 /*   By: bgenie <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 15:49:24 by bgenie            #+#    #+#             */
-/*   Updated: 2022/04/23 16:47:44 by bgenie           ###   ########.fr       */
+/*   Updated: 2022/04/28 17:27:33 by bgenie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 t_line_lst	*ft_new(char *line, int fd)
 {
@@ -27,17 +28,21 @@ t_line_lst	*ft_new(char *line, int fd)
 
 char	*ft_get_line(t_line_lst *line_lst, int fd)
 {
-	while (line_lst->fd != fd && line_lst)
+	if (!line_lst)
+		return (NULL);
+	while (line_lst && line_lst->fd != fd)
 		line_lst = line_lst->next;
 	return (line_lst->line);
 }
 
 t_line_lst	*ft_add_line(t_line_lst *line_lst, char *line, int fd)
 {
+	if (!line_lst)
+		return (ft_new(line, fd));
 	while (line_lst->next)
 		line_lst = line_lst->next;
 	line_lst->next = ft_new(line, fd);
-	return (line_lst->next);
+	return (line_lst);
 }
 
 void	ft_free_lst(t_line_lst *line_lst)
